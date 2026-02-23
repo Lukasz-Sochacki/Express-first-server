@@ -11,6 +11,9 @@ app.use((req, res, next) => {
   next();
 });
 
+//add function that shares folders (in my example it's public) - this function is operating all necessary endpoints
+app.use(express.static(path.join(__dirname, '/public')));
+
 app.get('/', (req, res) => {
   res.show('index.html');
 });
@@ -29,6 +32,10 @@ app.get('/info', (req, res) => {
 
 app.get('/history', (req, res) => {
   res.show('history.html');
+});
+
+app.use((req, res) => {
+  res.status(404).send('404 not found...');
 });
 
 // create an HTTP server on port no 8000
