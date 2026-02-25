@@ -1,6 +1,9 @@
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
+const multer = require('multer');
+
+const upload = multer({ dest: 'uploads/' });
 // create a new express application
 const app = express();
 
@@ -8,14 +11,6 @@ const app = express();
 app.engine('.hbs', hbs());
 //we use the views that have .hbs
 app.set('view engine', '.hbs');
-
-// app.use((req, res, next) => {
-//   res.show = (name) => {
-//     res.sendFile(path.join(__dirname, `/views/${name}`));
-//   };
-//   ``;
-//   next();
-// });
 
 //add function that shares folders (in my example it's public) - this function is operating all necessary endpoints
 app.use(express.static(path.join(__dirname, '/public')));
@@ -50,10 +45,15 @@ app.get('/history', (req, res) => {
   res.render('history');
 });
 
-app.post('/contact/send-message', (req, res) => {
+app.post('/contact/send-message', upload.single('file'), (req, res) => {
   const { author, sender, title, message } = req.body;
   if (author && sender && title && message) {
-    res.render('contact', { isSent: true });
+    if (req.file) {
+      const fileName = req.file.originalname;
+      res.render('contact', { isSent: true, fileName });
+    } else {
+      res.render('contact', { isErrorFile: true });
+    }
   } else {
     res.render('contact', { isError: true });
   }

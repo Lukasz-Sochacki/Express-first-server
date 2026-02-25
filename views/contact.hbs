@@ -5,6 +5,8 @@
   {{#if isSent}}
     <div class='isSent'>
       <p>The message has been sent!</p>
+      <br />
+      <p>File {{fileName}} has been saved!</p>
     </div>
   {{/if}}
 
@@ -13,7 +15,17 @@
       <p>You can't leave fields empty!</p>
     </div>
   {{/if}}
-  <form action='/contact/send-message' method='POST'>
+
+  {{#if isErrorFile}}
+    <div class='isError'>
+      You have to upload at least one file!
+    </div>
+  {{/if}}
+  <form
+    action='/contact/send-message'
+    method='POST'
+    enctype='multipart/form-data'
+  >
     <label>
       Your name:
       {{! 'name' attributes are the 'key' attributes in Postman }}
@@ -28,6 +40,11 @@
     <label>
       Title:
       <input type='text' name='title' />
+    </label>
+
+    <label>
+      Project design:
+      <input type='file' name='file' accept='.jpg, .jpeg, .png' />
     </label>
 
     <label>
