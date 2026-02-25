@@ -20,12 +20,18 @@ app.set('view engine', '.hbs');
 //add function that shares folders (in my example it's public) - this function is operating all necessary endpoints
 app.use(express.static(path.join(__dirname, '/public')));
 
+// use form x-www-form-urlencoded
+app.use(express.urlencoded({ extended: false }));
+
+// get data in JSON format (method POST in form-data option)
+app.use(express.json());
+
 app.get('/', (req, res) => {
   res.render('index');
 });
 
 app.get('/hello/:name', (req, res) => {
-  res.render('hello', { layout: false, name: req.params.name });
+  res.render('hello', { name: req.params.name });
 });
 
 app.get('/about', (req, res) => {
@@ -42,6 +48,10 @@ app.get('/info', (req, res) => {
 
 app.get('/history', (req, res) => {
   res.render('history');
+});
+
+app.post('/contact/send-message', (req, res) => {
+  res.json(req.body);
 });
 
 app.use((req, res) => {
