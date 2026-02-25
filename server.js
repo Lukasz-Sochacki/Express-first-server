@@ -1,13 +1,19 @@
 const express = require('express');
 const path = require('path');
-
+const hbs = require('express-handlebars');
 // create a new express application
 const app = express();
+
+//render files by engine - .hbs files should be operated by hbs engine (Handlebars)
+app.engine('.hbs', hbs());
+//we use the views that have .hbs
+app.set('view engine', '.hbs');
 
 app.use((req, res, next) => {
   res.show = (name) => {
     res.sendFile(path.join(__dirname, `/views/${name}`));
   };
+  ``;
   next();
 });
 
@@ -16,6 +22,10 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 app.get('/', (req, res) => {
   res.show('index.html');
+});
+
+app.get('/hello/:name', (req, res) => {
+  res.render('hello', { layout: false, name: req.params.name });
 });
 
 app.get('/about', (req, res) => {
