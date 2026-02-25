@@ -2,3 +2,8 @@ h1 {
   font-weight: lighter;
   font-style: italic;
 }
+
+.darkPage {
+  background-color: #000;
+  color: white;
+}
